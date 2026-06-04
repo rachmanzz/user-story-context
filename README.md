@@ -1,5 +1,9 @@
 # User Story Context
 
+```bash
+npx degit rachmanzz/user-story-context
+```
+
 AI asks 13 questions (5 phases), then generates 11+ files: `user-story.md` (map + traceability matrix) + `includes/*.md` (details per category) + export files + optional test boilerplate.
 
 ## Language Rule
