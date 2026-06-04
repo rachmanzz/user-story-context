@@ -4,14 +4,32 @@
 npx degit rachmanzz/user-story-context
 ```
 
-AI asks 13 questions (5 phases), then generates 11+ files: `user-story.md` (map + traceability matrix) + `includes/*.md` (details per category) + export files + optional test boilerplate.
+AI guides a structured discovery process through **5 phases** (~13 discovery questions), then generates **11+ files**: `user-story.md` (map + traceability matrix) + `includes/*.md` (details per category) + export files + optional test boilerplate.
+
+---
+
+## Why?
+
+Most AI-generated user stories suffer from:
+
+- **Missing acceptance criteria** — AI writes stories but forgets edge cases
+- **Inconsistent terminology** — "Admin" in one story, "Super Admin" in another
+- **No traceability** — Can't link stories to business goals or tests
+- **Difficult export** — Manual copy-paste to Jira or GitHub Issues
+- **Requirements drift** — Stories diverge from implementation over time
+
+User Story Context solves this by **asking first, generating later** — guiding AI through structured discovery before producing artifacts.
+
+---
 
 ## Language Rule
 
 | Mode | Language |
 |------|----------|
 | **Conversation** | Follows user's language (Indonesian / English) |
-| **Generated files** | **Always English** |
+| **Generated files** | Always English |
+
+---
 
 ## How to Use
 
@@ -28,13 +46,15 @@ Copy `.ai-context/system-prompt.md` into your AI assistant's **Custom Instructio
 
 ```
 I want to create user stories for [project name]
+```
 
---- or in Indonesian ---
+Or in Indonesian:
 
+```
 Saya mau buat user story untuk project [nama project]
 ```
 
-### 3. Answer 13 Questions (5 Phases)
+### 3. Answer ~13 Questions (5 Phases)
 
 | Phase | Topic | Questions |
 |-------|-------|-----------|
@@ -42,11 +62,11 @@ Saya mau buat user story untuk project [nama project]
 | 2 | Feature Breakdown (epics, flows, roles) | 3 |
 | 3 | Technical & Constraints | 3 |
 | 4 | Prioritization + Complexity Score | 3 |
-| 5 | Quality Review (INVEST score 6/6) | Review |
+| 5 | Quality Review (INVEST — see below) | Review |
 
 After each phase, AI summarizes and asks for confirmation.
 
-### 4. AI Generates 11+ Files (ALL in English)
+### 4. AI Generates 11+ Files (All in English)
 
 ```
 user-story.md              ← Map + Traceability Matrix + TOC
@@ -68,12 +88,56 @@ github-issues.json         ← GitHub-ready import
 ### 5. Update or Audit
 
 ```bash
-# Update stories without re-running all 12 questions
+# Update stories without re-running all questions
 # See .ai-context/update-workflow.md
 
-# Audit drift: check if docs match codebase
-./scripts/audit-sync.sh ./nama-feature ../src
+# Detect documentation drift
+./scripts/audit-sync.sh ./my-feature ../src
 ```
+
+---
+
+## Quality: INVEST Principles
+
+Before generating, AI reviews each story against **INVEST**:
+
+| Letter | Criterion | Meaning |
+|--------|-----------|---------|
+| **I** | Independent | Can it be delivered alone? |
+| **N** | Negotiable | Is there room for discussion? |
+| **V** | Valuable | Does it deliver user/business value? |
+| **E** | Estimable | Can the team estimate effort? |
+| **S** | Small | Can it fit in one sprint? |
+| **T** | Testable | Are acceptance criteria clear? |
+
+Each story gets a score (e.g. 6/6). If any criterion fails, AI suggests a fix before generating.
+
+---
+
+## Documentation Drift Detection
+
+As projects evolve, user stories often diverge from implementation. `scripts/audit-sync.sh` performs automated checks for:
+
+- **Missing references** — Epics without corresponding stories
+- **Broken links** — Cross-references in `user-story.md` pointing to nonexistent files
+- **UX state inconsistencies** — Loading/empty/error states mentioned inconsistently across stories
+- **Test coverage gaps** (optional) — Story IDs not found in codebase test files when a codebase directory is provided
+
+```bash
+./scripts/audit-sync.sh <feature-dir> [codebase-dir]
+```
+
+---
+
+## Example
+
+**Input:** `I want to build a task management application for small teams.`
+
+**Output after Q&A:** 3 Epics, 14 User Stories, 47 Acceptance Criteria, plus export files.
+
+See [`examples/`](examples/) for a complete generated output sample (login feature).
+
+---
 
 ## Directory Structure
 
@@ -85,17 +149,17 @@ github-issues.json         ← GitHub-ready import
 templates/                    ← Output templates
 ├── user-story-map.md         ← + Traceability Matrix
 ├── includes/                 ← 8 category templates
-│   └── decision-log.md       ← Decision records
 ├── exporters/                ← Export formats (CSV, JSON)
 └── automation/               ← Test boilerplate (Cypress, Playwright, Cucumber)
 contexts/                     ← Reusable context
-├── personas/                 ← Persona library (admin, customer, template)
+├── personas/                 ← Persona library
 └── ui-states/                ← Global UI states definition
 scenarios/                    ← Q&A scenario example
 examples/                     ← Generated output examples
 guides/                       ← Best practices
+prompts.md                    ← Init & continuation prompts reference
 scripts/                      ← Utilities
-└── audit-sync.sh             ← Documentation drift prevention
+└── audit-sync.sh             ← Documentation drift detection
 usc                           ← CLI scaffold tool
 ```
 
@@ -105,11 +169,4 @@ usc                           ← CLI scaffold tool
 ./usc init <name>       # Scaffold folder + template files
 ./usc list               # List all features
 ./usc help               # Show help
-```
-
-## Scripts
-
-```bash
-./scripts/audit-sync.sh <feature-dir> [codebase-dir]
-# Checks: story coverage, broken links, UX state consistency
 ```
