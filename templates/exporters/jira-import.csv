@@ -1,0 +1,10 @@
+Summary,Issue Type,Priority,Description,Acceptance Criteria,Epic Link,Labels
+{US-1 Title},Story,{High/Medium/Low},"As a {role}
+I want {capability}
+So that {benefit}","- {AC 1}
+- {AC 2}
+- {AC 3}",{Epic Name},{label}
+{US-2 Title},Story,{High/Medium/Low},"As a {role}
+I want {capability}
+So that {benefit}","- {AC 1}
+- {AC 2}",{Epic Name},{label}

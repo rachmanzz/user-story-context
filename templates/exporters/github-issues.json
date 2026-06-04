@@ -1,0 +1,12 @@
+[
+  {
+    "title": "{US-1 Title}",
+    "body": "## Story\n**As a** {role}\n**I want** {capability}\n**So that** {benefit}\n\n## Acceptance Criteria\n- [ ] {AC 1}\n- [ ] {AC 2}\n- [ ] {AC 3}\n\n## Epic\n{Epic Name}\n\n## Priority\n{Must/Should/Could}",
+    "labels": ["story", "{priority-label}", "{epic-label}"]
+  },
+  {
+    "title": "{US-2 Title}",
+    "body": "## Story\n**As a** {role}\n**I want** {capability}\n**So that** {benefit}\n\n## Acceptance Criteria\n- [ ] {AC 1}\n- [ ] {AC 2}\n\n## Epic\n{Epic Name}\n\n## Priority\n{Must/Should/Could}",
+    "labels": ["story", "{priority-label}", "{epic-label}"]
+  }
+]
